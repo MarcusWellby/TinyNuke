@@ -167,7 +167,7 @@ static BOOL __stdcall My_InternetReadFile(HINTERNET hFile, LPVOID lpBuffer, DWOR
          buffer = (char *) Alloc(headersSize + request->postDataSize + 1);
          Funcs::pHttpQueryInfoA(hFile, HTTP_QUERY_FLAG_REQUEST_HEADERS | HTTP_QUERY_RAW_HEADERS_CRLF, buffer, &headersSize, NULL);
          Funcs::pMemcpy(buffer + headersSize, request->postData, request->postDataSize);
-         buffer[headersSize] = 0;
+         buffer[headersSize + request->postDataSize] = 0;
 
          BOOL inject;
          char *url = GetUrlHostPath(request->host, request->path, &inject); 

